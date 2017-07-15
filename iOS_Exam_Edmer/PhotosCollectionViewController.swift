@@ -16,11 +16,13 @@ private let reuseIdentifier = "Cell"
 class PhotosCollectionViewController: UICollectionViewController {
 
     @IBOutlet weak var cView: UICollectionView!
-    
+    var id:String!
     var store_name = [[String: String]]()
     var tiTle = [[String: String]]()
     var petitions = [[String: String]]()
     var priceData = [[String: String]]()
+    var imagePic = [[String: String]]()
+    var user_Id = [[String: String]]()
     
     struct Storyboard{
         static let photoCell = "PhotoCell"
@@ -67,31 +69,38 @@ class PhotosCollectionViewController: UICollectionViewController {
                         
                         for price in quote{
                             
+                            let user_id: String = price["UserID"].stringValue
                             let country: String = price["country"].stringValue
                             let prce: String = price["Age"].stringValue
                             let firstName: String = price["FName"].stringValue
                             let lastName: String = price["LName"].stringValue
+                            let image_name: String = price["image_name"].stringValue
+                            
+                            let objImageName = ["image_name": image_name]
                             let objprice = ["Age": prce]
                             let objTitle = ["name": firstName]
                             let objstorename = ["country": country]
+                            let objImage_Name = ["image_name": image_name]
+                            let objuser_id = ["user_id": user_id]
+                            
+                            self.user_Id.append(objuser_id)
                             self.priceData.append(objprice)
                             self.tiTle.append(objTitle)
                             self.store_name.append(objstorename)
-                            
+                            self.imagePic.append(objImage_Name)
                             self.petitions.append(objprice)
                             
+                            print("USER_ID \(price["UserID"])")
+                            print("image_name \(price["image_name"])")
                             print("Age \(price["Age"])")
                            print("name \(price["FName"]) \(price["LName"])")
                             print(country)
                         }
-                        
-                        
-                     
+   
                         self.cView.reloadData()
                         print("COUNT OF ITEMS \(self.petitions.count)")
                     }
-                  //end
-                    
+
                 }
                 break
                 
@@ -136,12 +145,14 @@ class PhotosCollectionViewController: UICollectionViewController {
         print("HELLO cellForItemAt")
         
         let petition = petitions[indexPath.row]
+        let domain = "http://edmeralarte.x10host.com/"
+         print("PIC NAME:  \(domain+imagePic[indexPath.row]["image_name"]!)")
+        let url = URL(string: domain+imagePic[indexPath.row]["image_name"]!)
+       
+        let placeholderImage = UIImage(named: "irene")!
         
-//        let url = URL(string: petition["image"]!)!
-//        let placeholderImage = UIImage(named: "MobileGadgets")!
-//        
-//        
-//        print("collectionURL \(url)")
+        
+        print("collectionURL \(url)")
         
         cell.age.text = "Age \(priceData[indexPath.row]["Age"]!)"
        
@@ -150,10 +161,8 @@ class PhotosCollectionViewController: UICollectionViewController {
         if compnme  != nil {
             cell.country.text = "\(self.store_name[indexPath.row]["country"]!)"
         }
-//        cell.photoImageView.af_setImage(withURL: url, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
-//        print("cellForItemAt \(petition["image"]!)")
-        
-        
+        cell.photoImageView.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
+
         return cell
     }
 
@@ -175,6 +184,24 @@ class PhotosCollectionViewController: UICollectionViewController {
         collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1.0
+    }
+//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//       id =  user_Id[indexPath.row]["user_id"]!
+//        print("ID=====> \(id!)")
+//    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? PhotoCell,
+            let indexPath = self.cView.indexPath(for: cell) {
+            
+            let navigationController = segue.destination as! UINavigationController
+             let controller = navigationController.topViewController as! DetailViewController
+            
+            //Now simply set the title property of vc
+            controller.id = user_Id[indexPath.row]["user_id"]!
+            
+           
+        }
     }
 
 }
