@@ -15,16 +15,17 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet weak var country: UILabel!
   
     @IBOutlet weak var name: UILabel!
+ 
    
     @IBOutlet weak var age: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
     
-    var imageName: String!{
-        didSet{
-            photoImageView.image = UIImage(named:imageName )
-        }
-        
-    }
+//    var imageName: String!{
+//        didSet{
+//            photoImageView.image = UIImage(named:imageName )
+//        }
+//        
+//    }
 
     
     

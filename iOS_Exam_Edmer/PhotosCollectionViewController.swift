@@ -52,47 +52,44 @@ class PhotosCollectionViewController: UICollectionViewController {
             switch(response.result) {
             case .success(_):
                 if let data = response.result.value{
-                    // print("SUCCESS",data)
+                
                     
                     
                     
                     //start
                     
-//                    let json = JSON(data)
-//                    print("JSON DATA  \(json)")
-//                    if let quote = json["data"]["stores"]["stores"].array{
-//                        
-//                        
-//                        
-//                        
-//                        for price in quote{
-//                            
-//                            let storename: String = price["store_name"].stringValue
-//                            let prce: String = price["price"].stringValue
-//                            let tit: String = price["title"].stringValue
-//                            let objprice = ["price": prce]
-//                            let objTitle = ["title": tit]
-//                            let objstorename = ["store_name": storename]
-//                            self.priceData.append(objprice)
-//                            self.tiTle.append(objTitle)
-//                            self.store_name.append(objstorename)
-//                            print(prce)
-//                            print(tit)
-//                            print(storename)
-//                        }
-//                        
-//                        
-//                        for image in quote{
-//                            let pic: String = image["image"][0]["image_md"].stringValue
-//                            print(pic)
-//                            let obj = ["image": pic]
-//                            self.petitions.append(obj)
-//                            
-//                            
-//                        }
-//                        self.cView.reloadData()
-//                        print(self.petitions.count)
-//                    }
+                    let json = JSON(data)
+                    
+                    if let quote = json["users"].array{
+                        
+                        
+                        
+                        
+                        for price in quote{
+                            
+                            let country: String = price["country"].stringValue
+                            let prce: String = price["Age"].stringValue
+                            let firstName: String = price["FName"].stringValue
+                            let lastName: String = price["LName"].stringValue
+                            let objprice = ["Age": prce]
+                            let objTitle = ["name": firstName]
+                            let objstorename = ["country": country]
+                            self.priceData.append(objprice)
+                            self.tiTle.append(objTitle)
+                            self.store_name.append(objstorename)
+                            
+                            self.petitions.append(objprice)
+                            
+                            print("Age \(price["Age"])")
+                           print("name \(price["FName"]) \(price["LName"])")
+                            print(country)
+                        }
+                        
+                        
+                     
+                        self.cView.reloadData()
+                        print("COUNT OF ITEMS \(self.petitions.count)")
+                    }
                   //end
                     
                 }
@@ -125,52 +122,59 @@ class PhotosCollectionViewController: UICollectionViewController {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        return petitions.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
-    
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Storyboard.photoCell, for: indexPath) as! PhotoCell
+        print("HELLO cellForItemAt")
+        
+        let petition = petitions[indexPath.row]
+        
+//        let url = URL(string: petition["image"]!)!
+//        let placeholderImage = UIImage(named: "MobileGadgets")!
+//        
+//        
+//        print("collectionURL \(url)")
+        
+        cell.age.text = "Age \(priceData[indexPath.row]["Age"]!)"
+       
+        cell.name.text = tiTle[indexPath.row]["name"]
+        let compnme =  store_name[indexPath.row]["country"]
+        if compnme  != nil {
+            cell.country.text = "\(self.store_name[indexPath.row]["country"]!)"
+        }
+//        cell.photoImageView.af_setImage(withURL: url, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
+//        print("cellForItemAt \(petition["image"]!)")
+        
+        
         return cell
     }
 
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    //Use for size
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        var size = CGSize(width: 200, height: 10)
+        return size
+        
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
+    //Use for interspacing
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 1.0
     }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
+    func collectionView(_ collectionView: UICollectionView, layout
+        collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1.0
     }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
 
 }

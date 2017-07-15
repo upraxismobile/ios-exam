@@ -69,13 +69,10 @@
                                 </view>
                                 <size key="customSize" width="165" height="200"/>
                                 <connections>
-                                    <outlet property="TiTle" destination="BlC-0A-TaC" id="5Eb-by-niM"/>
                                     <outlet property="age" destination="fGU-uj-8R4" id="RhV-4y-Oos"/>
-                                    <outlet property="compName" destination="ymM-a0-99t" id="Mti-Ff-rS9"/>
                                     <outlet property="country" destination="ymM-a0-99t" id="BJT-OX-YPZ"/>
-                                    <outlet property="name" destination="ymM-a0-99t" id="1zE-kV-c6g"/>
+                                    <outlet property="name" destination="BlC-0A-TaC" id="RJm-nB-Svg"/>
                                     <outlet property="photoImageView" destination="gfh-0o-Xds" id="cUe-Hb-oYb"/>
-                                    <outlet property="price" destination="fGU-uj-8R4" id="jBk-Rw-ztD"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
