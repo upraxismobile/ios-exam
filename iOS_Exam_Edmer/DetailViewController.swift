@@ -17,44 +17,53 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var Country: UILabel!
     @IBOutlet weak var age: UILabel!
     @IBOutlet weak var name: UILabel!
-    
+    @IBOutlet weak var email: UILabel!
     @IBOutlet weak var address: UILabel!
     @IBOutlet weak var photo: UIImageView!
     
+    @IBOutlet weak var bday: UILabel!
+    @IBOutlet weak var mobile: UILabel!
     
+    @IBOutlet weak var contactperson: UILabel!
     
-    var store_name = [[String: String]]()
-    var tiTle = [[String: String]]()
-    var petitions = [[String: String]]()
-    var priceData = [[String: String]]()
+    @IBOutlet weak var contactPersonNumber: UILabel!
+    let domain = "http://edmeralarte.x10host.com/"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let parameterss: [String: Any] = [
             "UserID": id!
         ]
         print("ID IN DETAILVIEW CONTROLLER \(id!)")
+        
         Alamofire.request("http://edmeralarte.x10host.com/webservice/showall3.php", method: .get, parameters: parameterss, encoding: URLEncoding.default, headers: nil).responseJSON { (response:DataResponse<Any>) in
             
             switch(response.result) {
             case .success(_):
                 if let data = response.result.value{
-
+                    
                     let json = JSON(data)
-                    if let quote = json["users"].array{
-
-                        for price in quote{
+                    if let human = json["users"].array{
+                        
+                        for person in human{
                             
-                            let user_id: String = price["UserID"].stringValue
-                            let country: String = price["country"].stringValue
-                            let Age: String = price["Age"].stringValue
-                            let firstName: String = price["FName"].stringValue
-                            let lastName: String = price["LName"].stringValue
-                            let image_name: String = price["image_name"].stringValue
-                            let Address: String = price["address"].stringValue
-                            let domain = "http://edmeralarte.x10host.com/"
-                            print("PIC NAME:  \(domain+image_name)")
-                            let url = URL(string: domain+image_name)
-                            let placeholderImage = UIImage(named: "irene")!
+                            let user_id: String = person["UserID"].stringValue
+                            let country: String = person["country"].stringValue
+                            let Age: String = person["Age"].stringValue
+                            let firstName: String = person["FName"].stringValue
+                            let lastName: String = person["LName"].stringValue
+                            let image_name: String = person["image_name"].stringValue
+                            let Address: String = person["address"].stringValue
+                            let Email: String = person["email"].stringValue
+                            let Mobile: String = person["mobile"].stringValue
+                            let ContactPerson: String = person["contactperson"].stringValue
+                            let BDate: String = person["BDate"].stringValue
+                            let ContactpersonNumber: String = person["contactpersonNumber"].stringValue
+                           
+                            print("PIC NAME:  \(self.domain+image_name)")
+                            
+                            let url = URL(string: self.domain+image_name)
+                            
                             print(user_id)
                             print(country)
                             print(Age)
@@ -62,15 +71,22 @@ class DetailViewController: UIViewController {
                             print(lastName)
                             print(image_name)
                             print(Address)
-                            self.age.text = "Age: \(Age)"
+                            self.age.text = "age: \(Age)"
                             self.name.text = firstName + " " + lastName
                             self.Country.text = country
-                            self.address.text = Address
+                            self.address.text = "address: \(Address)"
+                            self.email.text = "email: \(Email)"
+                            self.mobile.text = "mobile: \(Mobile)"
+                            self.bday.text = "birthdate: \(BDate)"
+                            self.contactperson.text = "contact person: \(ContactPerson)"
+                            self.contactPersonNumber.text = "contact person's number: \(ContactpersonNumber)"
+                            
+                            let placeholderImage = UIImage(named: "irene")!
                             self.photo.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
                         }
-
+                        
                     }
-
+                    
                 }
                 break
                 
@@ -83,8 +99,8 @@ class DetailViewController: UIViewController {
         
     }
     
-@IBAction func cancelButton(_ sender: Any) {
+    @IBAction func cancelButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-
+    
 }

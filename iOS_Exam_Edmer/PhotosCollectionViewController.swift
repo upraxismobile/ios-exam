@@ -14,7 +14,7 @@ import SwiftyJSON
 private let reuseIdentifier = "Cell"
 
 class PhotosCollectionViewController: UICollectionViewController {
-
+    
     @IBOutlet weak var cView: UICollectionView!
     var id:String!
     var store_name = [[String: String]]()
@@ -36,7 +36,7 @@ class PhotosCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
- print("HELLO ")
+        print("HELLO ")
         let collectionViewWidth = collectionView?.frame.width
         
         let itemWidth = (collectionViewWidth! - Storyboard.leftAndRightPaddings)/Storyboard.numberOfItemsPerRow
@@ -45,16 +45,14 @@ class PhotosCollectionViewController: UICollectionViewController {
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = CGSize(width:itemWidth,height:itemWidth)
         layout.minimumLineSpacing = 10
-        //        layout.minimumInteritemSpacing = 20
-        
-//        Alamofire.request("https://marketplaceapi.bigbenta.com/index.php/api/search", method: .post, parameters: parameterss, encoding: URLEncoding.default, headers: nil).responseJSON { (response:DataResponse<Any>) in
+      
         
         Alamofire.request("http://edmeralarte.x10host.com/webservice/showallfaculty.php", method: .post, encoding: URLEncoding.default, headers: nil).responseJSON { (response:DataResponse<Any>) in
             
             switch(response.result) {
             case .success(_):
                 if let data = response.result.value{
-                
+                    
                     
                     
                     
@@ -62,19 +60,19 @@ class PhotosCollectionViewController: UICollectionViewController {
                     
                     let json = JSON(data)
                     
-                    if let quote = json["users"].array{
+                    if let human = json["users"].array{
                         
                         
                         
                         
-                        for price in quote{
+                        for person in human{
                             
-                            let user_id: String = price["UserID"].stringValue
-                            let country: String = price["country"].stringValue
-                            let prce: String = price["Age"].stringValue
-                            let firstName: String = price["FName"].stringValue
-                            let lastName: String = price["LName"].stringValue
-                            let image_name: String = price["image_name"].stringValue
+                            let user_id: String = person["UserID"].stringValue
+                            let country: String = person["country"].stringValue
+                            let prce: String = person["Age"].stringValue
+                            let firstName: String = person["FName"].stringValue
+                            let lastName: String = person["LName"].stringValue
+                            let image_name: String = person["image_name"].stringValue
                             
                             let objImageName = ["image_name": image_name]
                             let objprice = ["Age": prce]
@@ -90,17 +88,17 @@ class PhotosCollectionViewController: UICollectionViewController {
                             self.imagePic.append(objImage_Name)
                             self.petitions.append(objprice)
                             
-                            print("USER_ID \(price["UserID"])")
-                            print("image_name \(price["image_name"])")
-                            print("Age \(price["Age"])")
-                           print("name \(price["FName"]) \(price["LName"])")
+                            print("USER_ID \(person["UserID"])")
+                            print("image_name \(person["image_name"])")
+                            print("Age \(person["Age"])")
+                            print("name \(person["FName"]) \(person["LName"])")
                             print(country)
                         }
-   
+                        
                         self.cView.reloadData()
                         print("COUNT OF ITEMS \(self.petitions.count)")
                     }
-
+                    
                 }
                 break
                 
@@ -110,62 +108,46 @@ class PhotosCollectionViewController: UICollectionViewController {
                 
             }
         }
-
-
-        // Do any additional setup after loading the view.
+        
     }
-
- 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
-
+    
+    
+    
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-
+    
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return petitions.count
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Storyboard.photoCell, for: indexPath) as! PhotoCell
-        print("HELLO cellForItemAt")
-        
-        let petition = petitions[indexPath.row]
+
         let domain = "http://edmeralarte.x10host.com/"
-         print("PIC NAME:  \(domain+imagePic[indexPath.row]["image_name"]!)")
+        print("PIC NAME:  \(domain+imagePic[indexPath.row]["image_name"]!)")
         let url = URL(string: domain+imagePic[indexPath.row]["image_name"]!)
-       
+        
         let placeholderImage = UIImage(named: "irene")!
-        
-        
-        print("collectionURL \(url)")
-        
-        cell.age.text = "Age \(priceData[indexPath.row]["Age"]!)"
-       
+
+        cell.age.text = "age \(priceData[indexPath.row]["Age"]!)"
         cell.name.text = tiTle[indexPath.row]["name"]
         let compnme =  store_name[indexPath.row]["country"]
         if compnme  != nil {
             cell.country.text = "\(self.store_name[indexPath.row]["country"]!)"
         }
-        cell.photoImageView.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
-
+        //        cell.photoImageView.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
+        
+        // CACHE IMAGES AND PREVENTS LOADING FROM SOURCE WHEN CACHED
+        cell.photoImageView.sd_setImage(with: url, placeholderImage: placeholderImage, options: [.continueInBackground, .progressiveDownload])
+        
         return cell
     }
-
+    
     //Use for size
     func collectionView(collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -185,23 +167,18 @@ class PhotosCollectionViewController: UICollectionViewController {
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1.0
     }
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//       id =  user_Id[indexPath.row]["user_id"]!
-//        print("ID=====> \(id!)")
-//    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cell = sender as? PhotoCell,
             let indexPath = self.cView.indexPath(for: cell) {
             
             let navigationController = segue.destination as! UINavigationController
-             let controller = navigationController.topViewController as! DetailViewController
-            
-            //Now simply set the title property of vc
+            let controller = navigationController.topViewController as! DetailViewController
             controller.id = user_Id[indexPath.row]["user_id"]!
             
-           
+            
         }
     }
-
+    
 }
