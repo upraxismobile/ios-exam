@@ -82,7 +82,11 @@ class DetailViewController: UIViewController {
                             self.contactPersonNumber.text = "contact person's number: \(ContactpersonNumber)"
                             
                             let placeholderImage = UIImage(named: "irene")!
-                            self.photo.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
+//                            self.photo.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
+                            
+                            
+                            // CACHE IMAGES AND PREVENTS LOADING FROM SOURCE WHEN CACHED
+                              self.photo.sd_setImage(with: url!, placeholderImage: placeholderImage, options: [.continueInBackground, .progressiveDownload])
                         }
                         
                     }

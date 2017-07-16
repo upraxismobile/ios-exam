@@ -140,7 +140,7 @@ class PhotosCollectionViewController: UICollectionViewController {
         if compnme  != nil {
             cell.country.text = "\(self.store_name[indexPath.row]["country"]!)"
         }
-        //        cell.photoImageView.af_setImage(withURL: url!, placeholderImage: placeholderImage, filter: nil,imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: true, completion: nil)
+    
         
         // CACHE IMAGES AND PREVENTS LOADING FROM SOURCE WHEN CACHED
         cell.photoImageView.sd_setImage(with: url, placeholderImage: placeholderImage, options: [.continueInBackground, .progressiveDownload])
