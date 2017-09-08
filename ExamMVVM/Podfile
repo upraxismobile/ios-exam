@@ -1,0 +1,22 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'ExamMVVM' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  # Pods for ExamMVVM
+  pod 'Alamofire'
+  pod 'SwiftyJSON', :git => "https://github.com/acegreen/SwiftyJSON.git", :branch => "swift3"
+  pod 'Cache'
+
+  target 'ExamMVVMTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'ExamMVVMUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
